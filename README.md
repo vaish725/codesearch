@@ -12,23 +12,23 @@
 
 ### Why Codesearch?
 
-- 🔍 **IDE search breaks at scale** → Codesearch handles massive repos  
-- 🎯 **Need symbol-aware navigation** → Find definitions, not just text matches  
-- 💰 **Cloud tools cost money** → Codesearch is 100% free and local  
-- 🔒 **Privacy matters** → Your code never leaves your machine  
-- ⚡ **Fast incremental updates** → Re-index changed files in milliseconds  
+- **IDE search breaks at scale** → Codesearch handles massive repos  
+- **Need symbol-aware navigation** → Find definitions, not just text matches  
+- **Cloud tools cost money** → Codesearch is 100% free and local  
+- **Privacy matters** → Your code never leaves your machine  
+- **Fast incremental updates** → Re-index changed files in milliseconds  
 
 ### Key Features
 
-- 🚀 **Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
-- 🔬 **Symbol-Aware Queries** (find definitions, classes, imports, methods)
-- 🌐 **Multi-Language Support** (Python, JavaScript, TypeScript)
-- ⚡ **Incremental Indexing** (only re-index changed files, ~20x faster)
-- 🎯 **Hybrid Ranking** (exact match + definition + symbol boosts)
-- 📝 **Enhanced Snippets** (multi-line context with line numbers)
-- 💻 **CLI-First** design for terminal workflows
-- 📊 **JSON API** for programmatic access
-- 🔒 **100% Local** (no cloud, no network calls, $0 cost)
+- **Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
+- **Symbol-Aware Queries** (find definitions, classes, imports, methods)
+- **Multi-Language Support** (Python, JavaScript, TypeScript)
+- **Incremental Indexing** (only re-index changed files, ~20x faster)
+- **Hybrid Ranking** (exact match + definition + symbol boosts)
+- **Enhanced Snippets** (multi-line context with line numbers)
+- **CLI-First** design for terminal workflows
+- **JSON API** for programmatic access
+- **100% Local** (no cloud, no network calls, $0 cost)
 
 ## 🚀 Quick Start
 
@@ -47,7 +47,7 @@ codesearch query "class:UserController lang:javascript"
 codesearch query "import:react"
 ```
 
-## 📖 Usage Examples
+## Usage Examples
 
 ### Basic Text Search
 
@@ -144,7 +144,7 @@ codesearch stats
 codesearch purge
 ```
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 Tested on the codesearch codebase itself:
 
@@ -319,7 +319,7 @@ elif kind == "method":  score += 1.0
 elif kind == "import":  score += 0.5
 ```
 
-## 🧪 Testing
+## Testing
 
 Comprehensive test suite with 92 tests across all phases:
 
@@ -336,12 +336,12 @@ pytest tests/integration/ -v   # Integration tests only
 ```
 
 **Test Coverage:**
-- ✅ 92/92 tests passing (100%)
+- 92/92 tests passing (100%)
 - Unit tests: 27 tests
 - Integration tests: 65 tests
 - Test execution time: ~0.19s
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 codesearch/
@@ -381,21 +381,8 @@ codesearch/
 └── README.md              # This file
 ```
 
-## 🔄 Development Phases
 
-This project was built following a structured 6-phase plan:
-
-- ✅ **Phase 0**: Repository structure (COMPLETE)
-- ✅ **Phase 1**: SQLite + FTS baseline (COMPLETE - 27 tests)
-- ✅ **Phase 2**: Incremental indexing (COMPLETE - 37 tests)
-- ✅ **Phase 3**: Python AST symbols (COMPLETE - 67 tests)
-- ✅ **Phase 4**: JavaScript/TypeScript symbols (COMPLETE - 92 tests)
-- ✅ **Phase 5**: Hybrid ranking & UX polish (COMPLETE - 92 tests)
-- ✅ **Phase 6**: Benchmarks & documentation (COMPLETE)
-
-See [prd.md](prd.md) for the complete implementation roadmap.
-
-## 🎓 Learning & Insights
+## Learning & Insights
 
 This project demonstrates:
 
@@ -425,7 +412,7 @@ This project demonstrates:
 - ✅ JSON output for programmatic access
 - ❌ Less visual (but can add UI layer later)
 
-## 🚀 Future Enhancements
+## Future Enhancements
 
 Possible next steps (not committed):
 
@@ -437,11 +424,11 @@ Possible next steps (not committed):
 6. **Git Integration**: Search across branches, blame integration
 7. **Collaborative Filters**: Learn from user behavior
 
-## 📝 License
+## License
 
 MIT License - see [LICENSE](LICENSE) for details.
 
-## 🤝 Contributing
+## Contributing
 
 This is a portfolio/learning project, but feedback and suggestions are welcome!
 
@@ -449,7 +436,7 @@ This is a portfolio/learning project, but feedback and suggestions are welcome!
 2. **Have an idea?** Open an issue to discuss before implementing
 3. **Want to contribute?** Fork, branch, implement, test, PR
 
-## 📧 Contact
+## Contact
 
 **Author**: [Your Name]  
 **Email**: your.email@example.com  
