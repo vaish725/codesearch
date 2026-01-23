@@ -1,4 +1,4 @@
-# 🔍 Codesearch
+# Codesearch
 
 > A local-first, GitHub-scale code search engine with symbol awareness
 
@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-92%2F92%20passing-success.svg)](tests/)
 
-## 🎯 Overview
+## Overview
 
 **Codesearch** is a high-performance, **local-only** code search engine designed for developers working with large codebases (50k–1M+ lines of code). It combines full-text search with AST-based symbol extraction to provide GitHub-like search capabilities on your local machine—with zero cost and complete privacy.
 
@@ -30,7 +30,7 @@
 - **JSON API** for programmatic access
 - **100% Local** (no cloud, no network calls, $0 cost)
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install (from source)
@@ -178,7 +178,7 @@ Tested on the codesearch codebase itself:
 
 *Run your own benchmarks with: `python3 benchmarks/benchmark.py <repo_paths>`*
 
-## 🔬 Query Language
+## Query Language
 
 Codesearch supports a powerful query language with filters:
 
@@ -214,7 +214,7 @@ codesearch query "def:handleRequest lang:javascript"
 codesearch query "import:react lang:typescript"
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### High-Level Design
 
