@@ -2,7 +2,50 @@
 
 > A local-first, GitHub-scale code search engine with symbol awareness
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+# Delete the index
+codesearch purge
+```
+
+## Docker Support (Optional)
+
+Codesearch can be run in Docker for isolated environments or easy deployment.
+
+### Quick Start with Docker
+
+```bash
+# Build the Docker image
+docker build -t codesearch:latest .
+
+# Index a repository
+docker run -v /path/to/your/repo:/repos codesearch:latest index /repos
+
+# Search the index
+docker run -v /path/to/your/repo:/repos codesearch:latest query "def:main"
+
+# View statistics
+docker run codesearch:latest stats
+```
+
+### Using Docker Compose
+
+```bash
+# Start codesearch with docker-compose
+docker-compose run codesearch index /repos/my-project
+docker-compose run codesearch query "class:Database"
+docker-compose run codesearch stats
+```
+
+### Docker Configuration
+
+The Docker setup:
+- Uses Python 3.11 slim image for minimal size
+- Includes git for repository handling
+- Mounts volumes for repository access and index persistence
+- Runs all codesearch commands in isolated container
+
+**Note**: Docker is completely optional. Codesearch works perfectly fine without it using standard Python installation.
+
+## Performance Benchmarks.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-92%2F92%20passing-success.svg)](tests/)
 

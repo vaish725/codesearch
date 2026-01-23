@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  codesearch:
+    build: .
+    image: codesearch:latest
+    container_name: codesearch
+    volumes:
+      - ./repos:/repos  # Mount local repos directory
+      - codesearch-data:/root/.codesearch  # Persist index data
+    command: ["stats"]
+
+volumes:
+  codesearch-data:
+    driver: local
