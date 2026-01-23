@@ -1,0 +1,16 @@
+# Include important files in source distribution
+include README.md
+include LICENSE
+include pyproject.toml
+include .codesearchignore
+
+# Include documentation
+recursive-include docs *.md
+
+# Include SQL schema
+recursive-include codesearch/storage *.sql
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store

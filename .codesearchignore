@@ -1,0 +1,42 @@
+# Custom ignore file for codesearch
+# Similar to .gitignore but specific to indexing
+
+# Version control
+.git/
+.svn/
+.hg/
+
+# Dependencies
+node_modules/
+vendor/
+bower_components/
+
+# Build outputs
+dist/
+build/
+target/
+out/
+bin/
+obj/
+
+# Python
+__pycache__/
+venv/
+.venv/
+env/
+*.pyc
+
+# Caches
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Large data files
+*.db
+*.sqlite
+*.log

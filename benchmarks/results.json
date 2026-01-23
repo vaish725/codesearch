@@ -1,0 +1,15 @@
+[
+  {
+    "repo_name": "Github_Scale_Code_Search_Engine",
+    "repo_path": "/Users/vaishnavikamdi/Documents/Github_Scale_Code_Search_Engine",
+    "repo_size_loc": 5162,
+    "repo_size_mb": 0.14,
+    "file_count": 68,
+    "symbol_count": 376,
+    "index_time_seconds": 0.03,
+    "index_size_mb": 0.63,
+    "query_p50_ms": 0.14,
+    "query_p95_ms": 0.24,
+    "query_p99_ms": 0.36
+  }
+]
