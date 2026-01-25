@@ -20,15 +20,15 @@
 
 ### Key Features
 
-- **🖥️ Dual Interface**: Beautiful web UI for beginners + powerful CLI for experts
-- **⚡ Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
-- **🔍 Symbol-Aware Queries** (find definitions, classes, imports, methods)
-- **🌍 Multi-Language Support** (Python, JavaScript, TypeScript)
-- **🔄 Incremental Indexing** (only re-index changed files, ~20x faster)
-- **🎯 Hybrid Ranking** (exact match + definition + symbol boosts)
-- **📝 Enhanced Snippets** (multi-line context with line numbers)
-- **🔌 JSON API** for programmatic access & integrations
-- **🔒 100% Local** (no cloud, no network calls, $0 cost, total privacy)
+- **Dual Interface**: Beautiful web UI for beginners + powerful CLI for experts
+- **Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
+- **Symbol-Aware Queries** (find definitions, classes, imports, methods)
+- **Multi-Language Support** (Python, JavaScript, TypeScript)
+- **Incremental Indexing** (only re-index changed files, ~20x faster)
+- **Hybrid Ranking** (exact match + definition + symbol boosts)
+- **Enhanced Snippets** (multi-line context with line numbers)
+- **JSON API** for programmatic access & integrations
+- **100% Local** (no cloud, no network calls, $0 cost, total privacy)
 
 ## Quick Start
 
@@ -47,7 +47,7 @@ codesearch query "class:UserController lang:javascript"
 codesearch query "import:react"
 ```
 
-## 🌐 Web UI (Beginner-Friendly!)
+## Web UI (Beginner-Friendly!)
 
 Prefer a visual interface? CodeSearch includes a **beautiful local web UI** - perfect for beginners or anyone who prefers clicking over typing!
 
@@ -65,10 +65,10 @@ codesearch-web
 ```
 
 The web UI will automatically:
-- 🚀 Start a local server at `http://127.0.0.1:8080`
-- 🌐 Open your default browser
-- 📊 Show your index statistics
-- 🔍 Provide an intuitive search interface
+- Start a local server at `http://127.0.0.1:8080`
+- Open your default browser
+- Show your index statistics
+- Provide an intuitive search interface
 
 ### Web UI Features
 
@@ -82,11 +82,11 @@ The web UI will automatically:
 ### Screenshots
 
 The UI includes:
-- 📈 Dashboard with file/symbol counts
-- 🔍 Smart search box with filter hints
-- 📂 Indexed repository management
-- ⚡ Real-time query performance metrics
-- 🎨 Modern, responsive design
+- Dashboard with file/symbol counts
+- Smart search box with filter hints
+- Indexed repository management
+- Real-time query performance metrics
+- Modern, responsive design
 
 > **Note**: Both CLI and Web UI work together! Index via CLI, search via web UI, or vice versa - they share the same database.
 
@@ -525,11 +525,10 @@ This is a portfolio/learning project, but feedback and suggestions are welcome!
 
 ## Contact
 
-**Author**: [Your Name]  
-**Email**: your.email@example.com  
-**LinkedIn**: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)  
-**GitHub**: [github.com/yourusername](https://github.com/yourusername)
-
+**Author**: Vaishnavi Kamdi  
+**Email**: vaishnaviskamdi@gmail.com | v.kamdi@gwu.edu 
+**LinkedIn**: [linkedin.com/in/vaishnavi-kamdi/](https://www.linkedin.com/in/vaishnavi-kamdi/)  
+**GitHub**: [github.com/vaish725](https://github.com/vaish725)
 ---
 
 <p align="center">
