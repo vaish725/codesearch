@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSearch - Local Code Search Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 18px 60px 18px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #5568d3;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-group label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .option-group input, .option-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-hints {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .filter-hints code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            color: #667eea;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 200px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .results-count {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .results-time {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .result-item {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .result-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .result-path {
+            font-family: 'Monaco', 'Courier New', monospace;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .badge-symbol {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-text {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-score {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .result-snippet {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .result-context {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            border-left: 3px solid #ddd;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .index-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .index-form input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .index-form button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .index-form button:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .success-message, .error-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 CodeSearch</h1>
+            <p class="subtitle">Local GitHub-Scale Code Search Engine</p>
+        </header>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <div class="stat-value" id="statFiles">-</div>
+                <div class="stat-label">Files Indexed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statSymbols">-</div>
+                <div class="stat-label">Symbols</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statSize">-</div>
+                <div class="stat-label">Index Size</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('search')">🔍 Search</button>
+            <button class="tab" onclick="switchTab('index')">📚 Index</button>
+        </div>
+
+        <div id="searchTab" class="tab-content active">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search code... (try: def:main, class:Parser, import:pytest)"
+                        autocomplete="off"
+                    >
+                    <button class="search-btn" onclick="performSearch()">Search</button>
+                </div>
+
+                <div class="search-options">
+                    <div class="option-group">
+                        <label>Results:</label>
+                        <input type="number" id="topk" value="10" min="1" max="50" style="width: 70px;">
+                    </div>
+                    <div class="option-group">
+                        <label>Context:</label>
+                        <input type="number" id="context" value="2" min="0" max="10" style="width: 70px;">
+                    </div>
+                </div>
+
+                <div class="filter-hints">
+                    <strong>Quick Filters:</strong>
+                    <code>def:name</code> functions,
+                    <code>class:name</code> classes,
+                    <code>import:name</code> imports,
+                    <code>lang:python</code> language,
+                    <code>path:src/</code> path
+                </div>
+            </div>
+
+            <div class="results-container" id="resultsContainer">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <h3>Start Searching</h3>
+                    <p>Enter a query above to search your codebase</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="indexTab" class="tab-content">
+            <div class="search-box">
+                <h2 style="margin-bottom: 20px;">Index a Repository</h2>
+                
+                <div id="indexMessage"></div>
+
+                <div class="index-form">
+                    <input 
+                        type="text" 
+                        id="indexPath" 
+                        placeholder="Enter path to repository (e.g., ~/projects/myrepo or /Users/username/code)"
+                    >
+                    <button onclick="indexRepository()">Index</button>
+                </div>
+
+                <div class="filter-hints">
+                    <strong>Tips:</strong> Use absolute paths or ~ for home directory. The indexer will scan all files and extract symbols automatically.
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px;">Quick Actions</h3>
+                    <button class="index-form button" onclick="indexCurrentDir()" style="margin-right: 10px;">
+                        Index Current Directory
+                    </button>
+                    <button class="index-form button" onclick="if(confirm('Clear entire index?')) purgeIndex();" style="background: #dc3545;">
+                        Clear Index
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load stats on page load
+        loadStats();
+
+        // Enter key to search
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (tab === 'search') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('searchTab').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('indexTab').classList.add('active');
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('statFiles').textContent = data.total_files.toLocaleString();
+                document.getElementById('statSymbols').textContent = data.total_symbols.toLocaleString();
+                document.getElementById('statSize').textContent = data.database_size_mb.toFixed(2) + ' MB';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            const topk = parseInt(document.getElementById('topk').value);
+            const context = parseInt(document.getElementById('context').value);
+            const container = document.getElementById('resultsContainer');
+
+            // Show loading
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Searching...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, topk, context })
+                });
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="error-message">
+                        Search failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(data) {
+            const container = document.getElementById('resultsContainer');
+
+            if (data.total_results === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Results Found</h3>
+                        <p>Try a different query or adjust your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="results-header">
+                    <div class="results-count">
+                        Found ${data.total_results} result${data.total_results > 1 ? 's' : ''}
+                    </div>
+                    <div class="results-time">
+                        ${data.duration_ms.toFixed(2)}ms
+                    </div>
+                </div>
+            `;
+
+            data.results.forEach((result, index) => {
+                const isSymbol = result.match_type.startsWith('symbol:');
+                const badgeClass = isSymbol ? 'badge-symbol' : 'badge-text';
+                
+                html += `
+                    <div class="result-item">
+                        <div class="result-header">
+                            <div class="result-path">
+                                ${result.file_path}:${result.line_number}
+                            </div>
+                            <div class="result-meta">
+                                <span class="badge ${badgeClass}">${result.match_type}</span>
+                                ${result.language ? `<span class="badge" style="background: #e8f5e9; color: #2e7d32;">${result.language}</span>` : ''}
+                                <span class="badge badge-score">Score: ${result.score.toFixed(1)}</span>
+                            </div>
+                        </div>
+                        
+                        ${result.symbol_name ? `
+                            <div style="margin-bottom: 10px; font-weight: 600; color: #333;">
+                                📍 ${result.symbol_kind}: ${result.symbol_name}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="result-snippet">${escapeHtml(result.snippet)}</div>
+                        
+                        ${result.context_lines && result.context_lines.length > 0 ? `
+                            <div class="result-context">${result.context_lines.map(line => escapeHtml(line)).join('\n')}</div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function indexRepository() {
+            const path = document.getElementById('indexPath').value.trim();
+            const messageDiv = document.getElementById('indexMessage');
+            
+            if (!path) {
+                messageDiv.innerHTML = '<div class="error-message">Please enter a path</div>';
+                return;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Indexing ${path}...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.innerHTML = `
+                        <div class="success-message">
+                            ✅ Successfully indexed ${data.files_scanned} files<br>
+                            📝 New: ${data.files_new}, Updated: ${data.files_updated}, Deleted: ${data.files_deleted}<br>
+                            🔍 Symbols extracted: ${data.symbols_extracted}<br>
+                            ⏱️ Duration: ${data.duration_seconds}s
+                        </div>
+                    `;
+                    loadStats(); // Refresh stats
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `
+                    <div class="error-message">
+                        ❌ Indexing failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function indexCurrentDir() {
+            document.getElementById('indexPath').value = '.';
+            indexRepository();
+        }
+
+        async function purgeIndex() {
+            try {
+                const response = await fetch('/api/index', { method: 'DELETE' });
+                const data = await response.json();
+                
+                document.getElementById('indexMessage').innerHTML = `
+                    <div class="success-message">
+                        ✅ ${data.message}
+                    </div>
+                `;
+                loadStats();
+            } catch (error) {
+                document.getElementById('indexMessage').innerHTML = `
+                    <div class="error-message">
+                        ❌ Failed: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

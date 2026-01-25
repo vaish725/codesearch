@@ -20,15 +20,15 @@
 
 ### Key Features
 
-- **Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
-- **Symbol-Aware Queries** (find definitions, classes, imports, methods)
-- **Multi-Language Support** (Python, JavaScript, TypeScript)
-- **Incremental Indexing** (only re-index changed files, ~20x faster)
-- **Hybrid Ranking** (exact match + definition + symbol boosts)
-- **Enhanced Snippets** (multi-line context with line numbers)
-- **CLI-First** design for terminal workflows
-- **JSON API** for programmatic access
-- **100% Local** (no cloud, no network calls, $0 cost)
+- **🖥️ Dual Interface**: Beautiful web UI for beginners + powerful CLI for experts
+- **⚡ Fast Full-Text Search** using SQLite FTS5 (p50 < 1ms)
+- **🔍 Symbol-Aware Queries** (find definitions, classes, imports, methods)
+- **🌍 Multi-Language Support** (Python, JavaScript, TypeScript)
+- **🔄 Incremental Indexing** (only re-index changed files, ~20x faster)
+- **🎯 Hybrid Ranking** (exact match + definition + symbol boosts)
+- **📝 Enhanced Snippets** (multi-line context with line numbers)
+- **🔌 JSON API** for programmatic access & integrations
+- **🔒 100% Local** (no cloud, no network calls, $0 cost, total privacy)
 
 ## Quick Start
 
@@ -46,6 +46,53 @@ codesearch query "def:authenticate"
 codesearch query "class:UserController lang:javascript"
 codesearch query "import:react"
 ```
+
+## 🌐 Web UI (Beginner-Friendly!)
+
+Prefer a visual interface? CodeSearch includes a **beautiful local web UI** - perfect for beginners or anyone who prefers clicking over typing!
+
+### Quick Start
+
+```bash
+# Option 1: Use the quick-start script
+./start-web-ui.sh
+
+# Option 2: Direct Python command
+python3 -m codesearch.web.server
+
+# Option 3: Use the installed command
+codesearch-web
+```
+
+The web UI will automatically:
+- 🚀 Start a local server at `http://127.0.0.1:8080`
+- 🌐 Open your default browser
+- 📊 Show your index statistics
+- 🔍 Provide an intuitive search interface
+
+### Web UI Features
+
+- **Visual Search**: Type queries with auto-complete hints
+- **Interactive Results**: Click to see full context
+- **Real-time Stats**: Monitor your indexed codebase
+- **Index Management**: Add repositories with one click
+- **Filter Helpers**: Visual guides for `def:`, `class:`, `import:` filters
+- **JSON API**: REST API at `/docs` for automation
+
+### Screenshots
+
+The UI includes:
+- 📈 Dashboard with file/symbol counts
+- 🔍 Smart search box with filter hints
+- 📂 Indexed repository management
+- ⚡ Real-time query performance metrics
+- 🎨 Modern, responsive design
+
+> **Note**: Both CLI and Web UI work together! Index via CLI, search via web UI, or vice versa - they share the same database.
+
+---
+
+## CLI Usage
 ```
 
 ## Docker Support (Optional)
