@@ -1,6 +1,7 @@
 """
 Entry point for running codesearch as a module.
 """
+
 import sys
 from .cli import main
 

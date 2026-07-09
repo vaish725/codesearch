@@ -3,7 +3,7 @@ Unit tests for Python AST symbol extraction.
 """
 
 import pytest
-from codesearch.indexer.symbols.python_ast import PythonASTExtractor, Symbol
+from codesearch.indexer.symbols.python_ast import PythonASTExtractor
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def hello_world():
     print("Hello, World!")
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     assert symbols[0].name == "hello_world"
     assert symbols[0].kind == "function"
@@ -34,7 +34,7 @@ def greet(name, age=25):
     return f"Hello {name}, age {age}"
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     assert symbols[0].name == "greet"
     assert symbols[0].kind == "function"
@@ -49,7 +49,7 @@ async def fetch_data(url):
     return await get(url)
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     assert symbols[0].name == "fetch_data"
     assert symbols[0].kind == "function"
@@ -64,16 +64,16 @@ class Person:
         self.name = name
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # Should extract class and method
     assert len(symbols) == 2
-    
+
     # Check class
     class_symbol = [s for s in symbols if s.kind == "class"][0]
     assert class_symbol.name == "Person"
     assert class_symbol.kind == "class"
     assert "class Person" in class_symbol.signature
-    
+
     # Check method
     method_symbol = [s for s in symbols if s.kind == "method"][0]
     assert method_symbol.name == "Person.__init__"
@@ -87,7 +87,7 @@ class Dog(Animal, Mammal):
     pass
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     assert symbols[0].name == "Dog"
     assert symbols[0].kind == "class"
@@ -101,21 +101,21 @@ def test_extract_methods(extractor):
 class Calculator:
     def add(self, a, b):
         return a + b
-    
+
     def subtract(self, a, b):
         return a - b
-    
+
     async def multiply_async(self, a, b):
         return a * b
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # 1 class + 3 methods
     assert len(symbols) == 4
-    
+
     methods = [s for s in symbols if s.kind == "method"]
     assert len(methods) == 3
-    
+
     method_names = {s.name for s in methods}
     assert "Calculator.add" in method_names
     assert "Calculator.subtract" in method_names
@@ -131,10 +131,10 @@ from pathlib import Path
 from typing import List, Dict
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # 2 regular imports + 1 Path + 2 from typing = 5
     assert len(symbols) == 5
-    
+
     import_names = {s.name for s in symbols}
     assert "os" in import_names
     assert "sys" in import_names
@@ -150,10 +150,10 @@ from collections import defaultdict
 from os.path import join, exists
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 3
     assert all(s.kind == "import" for s in symbols)
-    
+
     names = {s.name for s in symbols}
     assert "collections.defaultdict" in names
     assert "os.path.join" in names
@@ -166,7 +166,7 @@ def test_extract_star_import(extractor):
 from utils import *
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     assert symbols[0].name == "utils.*"
     assert symbols[0].kind == "import"
@@ -179,7 +179,7 @@ def process(data, *args, verbose=False, **kwargs):
     pass
 """
     symbols = extractor.extract_from_source(source)
-    
+
     assert len(symbols) == 1
     sig = symbols[0].signature
     assert "data" in sig
@@ -197,7 +197,7 @@ def outer():
     return inner
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # Only outer function is extracted (nested functions not supported yet)
     assert len(symbols) >= 1
     function_names = {s.name for s in symbols}
@@ -211,7 +211,7 @@ def broken(
     # Missing closing paren
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # Should return empty list, not crash
     assert symbols == []
 
@@ -235,16 +235,16 @@ class Bar:  # Line 6 (appears as 7)
         pass  # Line 8
 """
     symbols = extractor.extract_from_source(source)
-    
+
     foo_symbol = [s for s in symbols if s.name == "foo"][0]
     # Line numbers are 1-indexed from the source string
     assert foo_symbol.start_line == 4  # "def foo():" line
     assert foo_symbol.end_line >= 5
-    
+
     bar_symbol = [s for s in symbols if s.name == "Bar"][0]
     assert bar_symbol.start_line == 7  # "class Bar:" line
     assert bar_symbol.end_line >= 9
-    
+
     baz_symbol = [s for s in symbols if s.name == "Bar.baz"][0]
     assert baz_symbol.start_line == 8
 
@@ -260,12 +260,12 @@ logger = logging.getLogger(__name__)
 class UserManager:
     def __init__(self, db_connection):
         self.db = db_connection
-    
+
     def create_user(self, username: str, email: str) -> int:
         query = "INSERT INTO users (username, email) VALUES (?, ?)"
         cursor = self.db.execute(query, (username, email))
         return cursor.lastrowid
-    
+
     def get_user(self, user_id: int) -> Optional[dict]:
         query = "SELECT * FROM users WHERE id = ?"
         cursor = self.db.execute(query, (user_id,))
@@ -276,17 +276,17 @@ def validate_email(email: str) -> bool:
     return "@" in email
 """
     symbols = extractor.extract_from_source(source)
-    
+
     # Should extract: 2 imports, 1 class, 3 methods/functions
     assert len(symbols) >= 5
-    
+
     # Check we have all the expected types
     kinds = {s.kind for s in symbols}
     assert "import" in kinds
     assert "class" in kinds
     assert "method" in kinds
     assert "function" in kinds
-    
+
     # Check specific symbols
     names = {s.name for s in symbols}
     assert "UserManager" in names

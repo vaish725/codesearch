@@ -3,8 +3,6 @@ Configuration settings for codesearch.
 """
 
 from pathlib import Path
-from typing import List
-
 
 # Default directories to exclude from indexing
 DEFAULT_EXCLUDE_DIRS = [
@@ -75,6 +73,7 @@ LANGUAGE_MAP = {
     ".sql": "sql",
 }
 
+
 # Database location
 def get_db_path() -> Path:
     """Get the path to the SQLite database."""
@@ -82,6 +81,7 @@ def get_db_path() -> Path:
     db_dir = Path.home() / ".codesearch"
     db_dir.mkdir(exist_ok=True)
     return db_dir / "index.db"
+
 
 # Batch size for database commits
 DB_BATCH_SIZE = 200

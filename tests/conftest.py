@@ -29,9 +29,9 @@ class User:
     def __init__(self, name):
         self.name = name
 """)
-    
+
     (temp_dir / "README.md").write_text("# Sample Repo")
-    
+
     return temp_dir
 
 
@@ -40,7 +40,7 @@ def test_repo(tmp_path):
     """Create a test repository with sample files."""
     repo = tmp_path / "test_repo"
     repo.mkdir()
-    
+
     # Create Python file
     (repo / "main.py").write_text("""
 def hello():
@@ -49,11 +49,11 @@ def hello():
 class User:
     def __init__(self, name):
         self.name = name
-    
+
     def greet(self):
         return f"Hello, {self.name}"
 """)
-    
+
     # Create JavaScript file
     (repo / "app.js").write_text("""
 function calculate(a, b) {
@@ -66,10 +66,10 @@ class App {
     }
 }
 """)
-    
+
     # Create text file
     (repo / "README.md").write_text("# Test Repository")
-    
+
     # Create a subdirectory
     src_dir = repo / "src"
     src_dir.mkdir()
@@ -77,7 +77,7 @@ class App {
 def multiply(x, y):
     return x * y
 """)
-    
+
     return repo
 
 
@@ -85,12 +85,12 @@ def multiply(x, y):
 def mock_db(temp_dir):
     """Create a mock database for testing."""
     from codesearch.storage.db import Database
-    
+
     db_path = temp_dir / "test.db"
     db = Database(db_path)
     db.connect()
     db.initialize_schema()
-    
+
     yield db
-    
+
     db.close()

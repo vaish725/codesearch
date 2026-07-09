@@ -18,9 +18,9 @@ def temp_repo():
     temp_dir = tempfile.mkdtemp()
     repo_path = Path(temp_dir) / "test_repo"
     repo_path.mkdir()
-    
+
     yield repo_path
-    
+
     # Cleanup
     shutil.rmtree(temp_dir)
 
@@ -31,13 +31,13 @@ def db():
     db_file = tempfile.NamedTemporaryFile(delete=False, suffix=".db")
     db_path = Path(db_file.name)
     db_file.close()
-    
+
     database = Database(db_path)
     database.connect()
     database.initialize_schema()
-    
+
     yield database
-    
+
     database.close()
     db_path.unlink()
 
@@ -52,24 +52,24 @@ from pathlib import Path
 class Calculator:
     def add(self, a, b):
         return a + b
-    
+
     def subtract(self, a, b):
         return a - b
 
 def multiply(x, y):
     return x * y
 """)
-    
+
     indexer = Indexer(db)
     stats = indexer.index_repository(temp_repo)
-    
+
     # Check that symbols were extracted
     assert stats["symbols_extracted"] > 0
-    
+
     # Check database
     db_stats = db.get_stats()
     assert db_stats["total_symbols"] > 0
-    
+
     # Should have: 2 imports, 1 class, 2 methods, 1 function = 6 symbols
     assert db_stats["total_symbols"] == 6
 
@@ -83,13 +83,13 @@ def calculate_total(items):
 def format_output(data):
     return str(data)
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:calculate_total")
-    
+
     assert len(results) > 0
     assert any("calculate_total" in r.snippet for r in results)
     assert any(r.match_type.startswith("symbol:") for r in results)
@@ -106,13 +106,13 @@ class Product:
     def __init__(self, title):
         self.title = title
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("class:User")
-    
+
     assert len(results) > 0
     assert any("User" in r.snippet for r in results)
 
@@ -124,13 +124,13 @@ import sqlite3
 from pathlib import Path
 from typing import List, Dict
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("import:sqlite3")
-    
+
     assert len(results) > 0
     assert any("sqlite3" in r.snippet.lower() for r in results)
 
@@ -141,17 +141,17 @@ def test_search_method_in_class(temp_repo, db):
 class DataService:
     def fetch_data(self, query):
         pass
-    
+
     def save_data(self, data):
         pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:fetch_data")
-    
+
     assert len(results) > 0
     # Method should be found
     assert any("fetch_data" in r.snippet for r in results)
@@ -170,13 +170,13 @@ class RequestHandler:
     def handle(self):
         pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:handle request")
-    
+
     # Should find functions with "handle" in name
     assert len(results) > 0
 
@@ -193,13 +193,13 @@ def calculate_average(numbers):
 def calculate_median(numbers):
     return sorted(numbers)[len(numbers) // 2]
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:calculate")
-    
+
     # Should find all three functions
     assert len(results) == 3
 
@@ -207,32 +207,32 @@ def calculate_median(numbers):
 def test_symbols_updated_on_file_change(temp_repo, db):
     """Test that symbols are updated when file changes."""
     file_path = temp_repo / "counter.py"
-    
+
     # Initial version
     file_path.write_text("""
 def increment(x):
     return x + 1
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:increment")
     assert len(results) == 1
-    
+
     # Update file - rename function
     file_path.write_text("""
 def decrement(x):
     return x - 1
 """)
-    
+
     indexer.index_repository(temp_repo)
-    
+
     # Old function should not be found
     results = search.search("def:increment")
     assert len(results) == 0
-    
+
     # New function should be found
     results = search.search("def:decrement")
     assert len(results) == 1
@@ -245,19 +245,19 @@ def test_symbols_deleted_with_file(temp_repo, db):
 def temporary_function():
     pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:temporary_function")
     assert len(results) == 1
-    
+
     # Delete the file
     file_path.unlink()
-    
+
     indexer.index_repository(temp_repo)
-    
+
     # Symbol should be gone
     results = search.search("def:temporary_function")
     assert len(results) == 0
@@ -270,18 +270,18 @@ def test_language_filter_with_symbols(temp_repo, db):
 def process_data():
     pass
 """)
-    
+
     (temp_repo / "utils.js").write_text("""
 function process_data() {
 }
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:process_data lang:python")
-    
+
     # Should only find Python file
     assert len(results) > 0
     assert all(r.language == "python" for r in results)
@@ -291,23 +291,23 @@ def test_path_filter_with_symbols(temp_repo, db):
     """Test combining path filter with symbol search."""
     (temp_repo / "src").mkdir()
     (temp_repo / "tests").mkdir()
-    
+
     (temp_repo / "src" / "app.py").write_text("""
 def main():
     pass
 """)
-    
+
     (temp_repo / "tests" / "test_app.py").write_text("""
 def test_main():
     pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:main path:src")
-    
+
     # Should only find function in src/
     assert len(results) > 0
     assert all("src" in r.file_path for r in results)
@@ -325,13 +325,13 @@ class MyClass:
 def my_function():
     pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("symbol:my")
-    
+
     # Should find both class, method, and function
     assert len(results) >= 3
 
@@ -351,17 +351,17 @@ class Dog(Mammal):
     def bark(self):
         print("Woof!")
 """)
-    
+
     indexer = Indexer(db)
     stats = indexer.index_repository(temp_repo)
-    
+
     # Should extract 3 classes + methods
     assert stats["symbols_extracted"] >= 6
-    
+
     search = SearchEngine(db.conn)
     results = search.search("class:Dog")
     assert len(results) > 0
-    
+
     # Check that inheritance info is in signature
     dog_result = [r for r in results if "Dog" in r.snippet][0]
     assert "Mammal" in dog_result.snippet
@@ -379,13 +379,13 @@ async def save_data(data):
 def sync_operation():
     pass
 """)
-    
+
     indexer = Indexer(db)
     indexer.index_repository(temp_repo)
-    
+
     search = SearchEngine(db.conn)
     results = search.search("def:fetch_data")
-    
+
     assert len(results) > 0
     # Should include "async" in signature
     assert any("async" in r.snippet for r in results)
@@ -398,13 +398,13 @@ def test_no_symbols_for_non_python_files(temp_repo, db):
 def fake_function():
     This is just text, not code
 """)
-    
+
     (temp_repo / "data.json").write_text("""
 {"function": "not_real"}
 """)
-    
+
     indexer = Indexer(db)
     stats = indexer.index_repository(temp_repo)
-    
+
     # No Python files, so no symbols extracted
     assert stats.get("symbols_extracted", 0) == 0
