@@ -26,8 +26,7 @@ codesearch/                          # Root project directory
 │   ├── query/                      # Query subsystem
 │   │   ├── __init__.py
 │   │   ├── parser.py               # Query parser
-│   │   ├── search.py               # Search engine
-│   │   └── ranker.py               # Result ranking
+│   │   └── search.py               # Search engine + hybrid ranking
 │   │
 │   ├── storage/                    # Storage subsystem
 │   │   ├── __init__.py
@@ -178,8 +177,7 @@ indexer/
 ```
 query/
 ├── parser.py        # Parse query syntax
-├── search.py        # Execute searches
-└── ranker.py        # Score and rank results
+└── search.py        # Execute searches + hybrid scoring
 ```
 
 **Responsibilities:**

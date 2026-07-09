@@ -447,8 +447,7 @@ codesearch/
 │   │       └── treesitter_js.py  # JS/TS regex
 │   ├── query/              # Search components
 │   │   ├── parser.py       # Query parser
-│   │   ├── search.py       # Search engine
-│   │   └── ranker.py       # Ranking (future)
+│   │   └── search.py       # Search engine + hybrid ranking
 │   ├── storage/            # Database layer
 │   │   ├── db.py           # SQLite wrapper
 │   │   └── schema.sql      # Database schema
